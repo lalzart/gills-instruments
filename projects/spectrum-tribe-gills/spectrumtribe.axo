@@ -1,0 +1,77 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="spectrumtribe" uuid="8B563B1E-8C19-48CE-AB98-8133972A543B">
+      <sDescription>Spectrum Tribe: three paired resonant drums with independent polyrhythms, collision mutations, and a shared spectral bloom.</sDescription>
+      <author>Lance Ship</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="lowtune" description="low drum tuning"/>
+         <frac32.positive name="midtune" description="mid drum tuning"/>
+         <frac32.positive name="hightune" description="high drum tuning"/>
+         <frac32.positive name="decay" description="resonator decay and ringing"/>
+         <frac32.positive name="material" description="skin through wood to metallic overtone material"/>
+         <frac32.positive name="lowrhythm" description="low drum hits per four-beat cycle"/>
+         <frac32.positive name="midrhythm" description="mid drum hits per four-beat cycle"/>
+         <frac32.positive name="highrhythm" description="high drum hits per four-beat cycle"/>
+         <frac32.positive name="phase" description="phase separation between the three rhythms"/>
+         <frac32.positive name="space" description="shared stereo spectral bloom"/>
+         <bool32 name="groove" description="cycle even, sway, clave, and drift groove families"/>
+         <bool32 name="mutate" description="mutate phase offsets and overtone relationships"/>
+         <bool32 name="hold" description="freeze or release generative changes"/>
+         <bool32 name="tuning" description="cycle harmonic, pentatonic, just, and tritave tuning families"/>
+         <int32.bipolar name="tempo" description="tempo from 40 to 180 BPM"/>
+         <bool32 name="fill" description="strike all three resonant drums"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio output"/>
+         <frac32buffer.bipolar name="right" description="right audio output"/>
+         <bool32 name="led1" description="low drum activity"/>
+         <bool32 name="led2" description="mid drum activity"/>
+         <bool32 name="led3" description="high drum activity"/>
+         <bool32 name="led4" description="generative state held"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./spectrumtribe_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[spectrumtribe::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t controls[spectrumtribe::Instrument::PARAM_LAST] = {
+  inlet_lowtune,
+  inlet_midtune,
+  inlet_hightune,
+  inlet_decay,
+  inlet_material,
+  inlet_lowrhythm,
+  inlet_midrhythm,
+  inlet_highrhythm,
+  inlet_phase,
+  inlet_space
+};
+
+instrument.Process(
+  controls,
+  inlet_groove > 0,
+  inlet_mutate > 0,
+  inlet_hold > 0,
+  inlet_tuning > 0,
+  inlet_tempo,
+  inlet_fill > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+outlet_led1 = instrument.voice_led(0) ? (1 << 27) : 0;
+outlet_led2 = instrument.voice_led(1) ? (1 << 27) : 0;
+outlet_led3 = instrument.voice_led(2) ? (1 << 27) : 0;
+outlet_led4 = instrument.hold() ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,75 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="afterring" uuid="A5B80E65-9D7E-4F9E-874B-EA419A8C2BE1">
+      <sDescription>Afterring: a four-stage feedback-body wave with an independently clocked tuned pulse layer for Ksoloti Gills.</sDescription>
+      <author>Lance Ship; Mutable Instruments DSP by Emilie Gillet</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="stage1" description="primary note for stage 1"/>
+         <frac32.positive name="stage2" description="primary note for stage 2"/>
+         <frac32.positive name="stage3" description="primary note for stage 3"/>
+         <frac32.positive name="stage4" description="primary note for stage 4"/>
+         <frac32.positive name="rate" description="primary four-stage cycle rate"/>
+         <frac32.positive name="memory" description="high repeats, low evolves"/>
+         <frac32.positive name="material" description="wave body and pulse tone"/>
+         <frac32.positive name="rhythm" description="secondary rhythm relationship"/>
+         <frac32.positive name="movement" description="secondary melodic movement"/>
+         <frac32.positive name="level" description="secondary layer level"/>
+         <bool32.rising name="oscillator" description="cycle ROUND, FOLD, and REED main sources"/>
+         <bool32.rising name="mutate" description="make one bounded mutation"/>
+         <bool32.rising name="lock" description="toggle all automatic evolution"/>
+         <bool32.rising name="hold" description="hold or release secondary evolution"/>
+         <int32.bipolar name="encoder" description="root MIDI note, expected range 36 to 72"/>
+         <bool32.rising name="encoder_sw" description="tap scale, hold secondary follow mode"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio"/>
+         <frac32buffer.bipolar name="right" description="right audio"/>
+         <bool32 name="led1" description="stage 1 active"/>
+         <bool32 name="led2" description="stage 2 active"/>
+         <bool32 name="led3" description="stage 3 active"/>
+         <bool32 name="led4" description="stage 4 active"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./afterring_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[afterring::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t stages[4] = {
+  inlet_stage1, inlet_stage2, inlet_stage3, inlet_stage4
+};
+
+instrument.Process(
+  stages,
+  inlet_rate,
+  inlet_memory,
+  inlet_material,
+  inlet_rhythm,
+  inlet_movement,
+  inlet_level,
+  inlet_oscillator > 0,
+  inlet_mutate > 0,
+  inlet_lock > 0,
+  inlet_hold > 0,
+  inlet_encoder,
+  inlet_encoder__sw > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+const uint8_t stage = instrument.stage();
+outlet_led1 = stage == 0 ? (1 << 27) : 0;
+outlet_led2 = stage == 1 ? (1 << 27) : 0;
+outlet_led3 = stage == 2 ? (1 << 27) : 0;
+outlet_led4 = stage == 3 ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>

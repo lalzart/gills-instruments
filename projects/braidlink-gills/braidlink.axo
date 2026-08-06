@@ -1,0 +1,78 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="braidlink" uuid="87FD3029-23BA-4655-A0BD-A35A208C9492">
+      <sDescription>Braidlink: a monophonic Digitakt companion voice with a Braids-derived oscillator, Streams vactrol articulation, modal body, and Clouds reverb.</sDescription>
+      <author>Lance Ship; Mutable Instruments DSP by Emilie Gillet</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="timbre" description="base oscillator timbre"/>
+         <frac32.positive name="color" description="base oscillator color"/>
+         <frac32.positive name="attack" description="amplitude and vactrol attack"/>
+         <frac32.positive name="decay" description="amplitude and vactrol decay"/>
+         <frac32.positive name="brightness" description="vactrol low-pass brightness"/>
+         <frac32.positive name="body" description="modal body amount"/>
+         <frac32.positive name="damping" description="modal body damping"/>
+         <frac32.positive name="drive" description="soft drive"/>
+         <frac32.positive name="space" description="Clouds reverb amount"/>
+         <frac32.positive name="level" description="output level"/>
+         <bool32 name="model" description="cycle oscillator model"/>
+         <bool32 name="character" description="cycle clean, wood, and metal body"/>
+         <bool32 name="midimode" description="toggle MIDI CC offset and absolute modes"/>
+         <bool32 name="reverb" description="toggle reverb"/>
+         <int32.positive name="channel" description="MIDI channel 1 to 16"/>
+         <bool32 name="articulation" description="toggle pluck and gate articulation"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio"/>
+         <frac32buffer.bipolar name="right" description="right audio"/>
+         <bool32 name="led1" description="MIDI gate active"/>
+         <bool32 name="led2" description="modal body active"/>
+         <bool32 name="led3" description="MIDI offset mode active"/>
+         <bool32 name="led4" description="reverb active"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./braidlink_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[braidlink::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t controls[braidlink::Instrument::PARAM_LAST] = {
+  inlet_timbre,
+  inlet_color,
+  inlet_attack,
+  inlet_decay,
+  inlet_brightness,
+  inlet_body,
+  inlet_damping,
+  inlet_drive,
+  inlet_space,
+  inlet_level
+};
+
+instrument.Process(
+  controls,
+  inlet_model > 0,
+  inlet_character > 0,
+  inlet_midimode > 0,
+  inlet_reverb > 0,
+  inlet_channel,
+  inlet_articulation > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+outlet_led1 = instrument.gate() ? (1 << 27) : 0;
+outlet_led2 = instrument.body_mode() != 0 ? (1 << 27) : 0;
+outlet_led3 = instrument.midi_offset_mode() ? (1 << 27) : 0;
+outlet_led4 = instrument.reverb_enabled() ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+      <code.midihandler><![CDATA[instrument.HandleMidi(status, data1, data2);]]></code.midihandler>
+   </obj.normal>
+</objdefs>

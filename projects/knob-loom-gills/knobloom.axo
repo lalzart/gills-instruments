@@ -1,0 +1,77 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="knobloom" uuid="20FC1B86-39B9-4542-BEBD-DEBDD9B870D3">
+      <sDescription>Knob Loom: ten modal threads whose pitch follows pot position and whose excitation follows physical pot movement.</sDescription>
+      <author>Lance Ship</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="thread1" description="thread 1 pitch position and movement excitation"/>
+         <frac32.positive name="thread2" description="thread 2 pitch position and movement excitation"/>
+         <frac32.positive name="thread3" description="thread 3 pitch position and movement excitation"/>
+         <frac32.positive name="thread4" description="thread 4 pitch position and movement excitation"/>
+         <frac32.positive name="thread5" description="thread 5 pitch position and movement excitation"/>
+         <frac32.positive name="thread6" description="thread 6 pitch position and movement excitation"/>
+         <frac32.positive name="thread7" description="thread 7 pitch position and movement excitation"/>
+         <frac32.positive name="thread8" description="thread 8 pitch position and movement excitation"/>
+         <frac32.positive name="thread9" description="thread 9 pitch position and movement excitation"/>
+         <frac32.positive name="thread10" description="thread 10 pitch position and movement excitation"/>
+         <bool32 name="strum" description="strum all ten threads"/>
+         <bool32 name="reverse" description="reverse the direction of coupling flow"/>
+         <bool32 name="sustain" description="hold or release long thread sustain"/>
+         <bool32 name="tangle" description="cycle ring, star, pair, and cross coupling"/>
+         <int32.bipolar name="decay" description="encoder decay from 0 to 127"/>
+         <bool32 name="scale" description="cycle the tuning scale"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio output"/>
+         <frac32buffer.bipolar name="right" description="right audio output"/>
+         <bool32 name="led1" description="pot movement or strum activity"/>
+         <bool32 name="led2" description="coupling direction reversed"/>
+         <bool32 name="led3" description="sustain held"/>
+         <bool32 name="led4" description="non-ring coupling topology selected"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./knobloom_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[knobloom::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t controls[knobloom::Instrument::PARAM_LAST] = {
+  inlet_thread1,
+  inlet_thread2,
+  inlet_thread3,
+  inlet_thread4,
+  inlet_thread5,
+  inlet_thread6,
+  inlet_thread7,
+  inlet_thread8,
+  inlet_thread9,
+  inlet_thread10
+};
+
+instrument.Process(
+  controls,
+  inlet_strum > 0,
+  inlet_reverse > 0,
+  inlet_sustain > 0,
+  inlet_tangle > 0,
+  inlet_decay,
+  inlet_scale > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+outlet_led1 = instrument.activity() ? (1 << 27) : 0;
+outlet_led2 = instrument.reverse() ? (1 << 27) : 0;
+outlet_led3 = instrument.sustain() ? (1 << 27) : 0;
+outlet_led4 = instrument.topology() != knobloom::Instrument::TOPOLOGY_RING ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>

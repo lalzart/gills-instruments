@@ -1,0 +1,77 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="lacuna" uuid="904FA595-C2E9-45F9-BF08-2E6F07CFB77A">
+      <sDescription>Lacuna: a continuous three-layer field played by recording and performing spectral absences.</sDescription>
+      <author>Lance Ship</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="pitch" description="field fundamental pitch"/>
+         <frac32.positive name="spread" description="form layer harmonic spread"/>
+         <frac32.positive name="density" description="field spectral density"/>
+         <frac32.positive name="air" description="upper noise texture"/>
+         <frac32.positive name="motion" description="internal stereo field movement"/>
+         <frac32.positive name="gap" description="default gap duration"/>
+         <frac32.positive name="edge" description="gap edge from knife to breath"/>
+         <frac32.positive name="depth" description="layer gap depth"/>
+         <frac32.positive name="mutation" description="bounded extra gaps derived from the recorded pattern"/>
+         <frac32.positive name="scar" description="re-entry flare amount and persistence"/>
+         <bool32 name="body" description="remove the low body layer"/>
+         <bool32 name="form" description="remove the middle form layer"/>
+         <bool32 name="airgap" description="remove the upper air layer"/>
+         <bool32 name="voidgap" description="remove the complete output"/>
+         <int32.bipolar name="tempo" description="loop tempo from 40 to 180 BPM"/>
+         <bool32 name="capture" description="tap to capture four beats; hold to clear"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio output"/>
+         <frac32buffer.bipolar name="right" description="right audio output"/>
+         <bool32 name="led1" description="body layer present"/>
+         <bool32 name="led2" description="form layer present"/>
+         <bool32 name="led3" description="air layer present"/>
+         <bool32 name="led4" description="complete field present"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./lacuna_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[lacuna::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t controls[lacuna::Instrument::PARAM_LAST] = {
+  inlet_pitch,
+  inlet_spread,
+  inlet_density,
+  inlet_air,
+  inlet_motion,
+  inlet_gap,
+  inlet_edge,
+  inlet_depth,
+  inlet_mutation,
+  inlet_scar
+};
+
+instrument.Process(
+  controls,
+  inlet_body > 0,
+  inlet_form > 0,
+  inlet_airgap > 0,
+  inlet_voidgap > 0,
+  inlet_tempo,
+  inlet_capture > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+outlet_led1 = instrument.layer_present(0) ? (1 << 27) : 0;
+outlet_led2 = instrument.layer_present(1) ? (1 << 27) : 0;
+outlet_led3 = instrument.layer_present(2) ? (1 << 27) : 0;
+outlet_led4 = instrument.field_present() ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>

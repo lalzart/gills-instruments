@@ -1,0 +1,146 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="14" y="14" text="BRAIDLINK POLY4 - four-voice Digitakt macro instrument for Ksoloti Gills"/>
+   <comment type="patch/comment" x="14" y="42" text="Pots: 1 timbre | 2 color | 3 attack | 4 decay | 5 brightness | 6 body | 7 damping | 8 drive | 9 space | 10 level"/>
+   <comment type="patch/comment" x="14" y="70" text="Buttons: 1 model | 2 body | 3 MIDI offset/absolute | 4 reverb | Encoder MIDI channel | push pluck/gate"/>
+
+   <obj type="audio/outconfig" uuid="eace67e3304afaa1bb695b444e9345f2d8adaf00" name="audio_config" x="14" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="headphones" selection="-24dB"/>
+         <combo attributeName="mode" selection="Stereo"/>
+      </attribs>
+   </obj>
+
+   <obj type="const/i" uuid="e202f44b2df17ae0b3e663b98ea6b14c8ff00408" name="channel_init" x="14" y="168">
+      <params/>
+      <attribs><spinner attributeName="value" value="1"/></attribs>
+   </obj>
+
+   <obj type="ksoloti/gills/encoder" uuid="8d8c7129-cce1-491f-98b4-6ecb6355cfee" name="channel" x="126" y="154">
+      <params/>
+      <attribs>
+         <spinner attributeName="min" value="1"/>
+         <spinner attributeName="max" value="16"/>
+      </attribs>
+   </obj>
+
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="timbre" x="14" y="252">
+      <params/><attribs><combo attributeName="pot" selection="1"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="color" x="14" y="308">
+      <params/><attribs><combo attributeName="pot" selection="2"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="attack" x="14" y="364">
+      <params/><attribs><combo attributeName="pot" selection="3"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="decay" x="14" y="420">
+      <params/><attribs><combo attributeName="pot" selection="4"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="brightness" x="14" y="476">
+      <params/><attribs><combo attributeName="pot" selection="5"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="body" x="14" y="532">
+      <params/><attribs><combo attributeName="pot" selection="6"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="damping" x="14" y="588">
+      <params/><attribs><combo attributeName="pot" selection="7"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="drive" x="14" y="644">
+      <params/><attribs><combo attributeName="pot" selection="8"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="space" x="14" y="700">
+      <params/><attribs><combo attributeName="pot" selection="9"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="level" x="14" y="756">
+      <params/><attribs><combo attributeName="pot" selection="10"/></attribs>
+   </obj>
+
+   <obj type="ksoloti/gills/button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229" name="model" x="182" y="252">
+      <params/><attribs><combo attributeName="button" selection="1"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229" name="character" x="182" y="322">
+      <params/><attribs><combo attributeName="button" selection="2"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229" name="midimode" x="182" y="392">
+      <params/><attribs><combo attributeName="button" selection="3"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229" name="reverb" x="182" y="462">
+      <params/><attribs><combo attributeName="button" selection="4"/></attribs>
+   </obj>
+
+   <obj type="./braidlink_poly4" uuid="46CE0074-40BF-44DD-8737-E6FACF232066" name="braidlink_poly4" x="392" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="audio_out" x="756" y="252">
+      <params/><attribs/>
+   </obj>
+
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led1" x="756" y="364">
+      <params/><attribs><combo attributeName="led" selection="1"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led2" x="756" y="420">
+      <params/><attribs><combo attributeName="led" selection="2"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led3" x="756" y="476">
+      <params/><attribs><combo attributeName="led" selection="3 blue"/></attribs>
+   </obj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led4" x="756" y="532">
+      <params/><attribs><combo attributeName="led" selection="4 blue"/></attribs>
+   </obj>
+
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display" x="756" y="630">
+      <params/>
+      <attribs>
+         <combo attributeName="useScope" selection="off"/>
+         <objref attributeName="scope" obj=""/>
+         <combo attributeName="narrowFont" selection="on"/>
+      </attribs>
+   </obj>
+
+   <nets>
+      <net><source obj="channel_init" outlet="out"/><dest obj="channel" inlet="set"/></net>
+      <net><source obj="channel" outlet="out"/><dest obj="braidlink_poly4" inlet="channel"/></net>
+      <net><source obj="channel" outlet="sw"/><dest obj="braidlink_poly4" inlet="articulation"/></net>
+
+      <net><source obj="timbre" outlet="out"/><dest obj="braidlink_poly4" inlet="timbre"/></net>
+      <net><source obj="color" outlet="out"/><dest obj="braidlink_poly4" inlet="color"/></net>
+      <net><source obj="attack" outlet="out"/><dest obj="braidlink_poly4" inlet="attack"/></net>
+      <net><source obj="decay" outlet="out"/><dest obj="braidlink_poly4" inlet="decay"/></net>
+      <net><source obj="brightness" outlet="out"/><dest obj="braidlink_poly4" inlet="brightness"/></net>
+      <net><source obj="body" outlet="out"/><dest obj="braidlink_poly4" inlet="body"/></net>
+      <net><source obj="damping" outlet="out"/><dest obj="braidlink_poly4" inlet="damping"/></net>
+      <net><source obj="drive" outlet="out"/><dest obj="braidlink_poly4" inlet="drive"/></net>
+      <net><source obj="space" outlet="out"/><dest obj="braidlink_poly4" inlet="space"/></net>
+      <net><source obj="level" outlet="out"/><dest obj="braidlink_poly4" inlet="level"/></net>
+
+      <net><source obj="model" outlet="out"/><dest obj="braidlink_poly4" inlet="model"/></net>
+      <net><source obj="character" outlet="out"/><dest obj="braidlink_poly4" inlet="character"/></net>
+      <net><source obj="midimode" outlet="out"/><dest obj="braidlink_poly4" inlet="midimode"/></net>
+      <net><source obj="reverb" outlet="out"/><dest obj="braidlink_poly4" inlet="reverb"/></net>
+
+      <net><source obj="braidlink_poly4" outlet="left"/><dest obj="audio_out" inlet="left"/></net>
+      <net><source obj="braidlink_poly4" outlet="right"/><dest obj="audio_out" inlet="right"/></net>
+      <net><source obj="braidlink_poly4" outlet="led1"/><dest obj="led1" inlet="in"/></net>
+      <net><source obj="braidlink_poly4" outlet="led2"/><dest obj="led2" inlet="in"/></net>
+      <net><source obj="braidlink_poly4" outlet="led3"/><dest obj="led3" inlet="in"/></net>
+      <net><source obj="braidlink_poly4" outlet="led4"/><dest obj="led4" inlet="in"/></net>
+      <net><source obj="braidlink_poly4" outlet="line1"/><dest obj="display" inlet="line1"/></net>
+      <net><source obj="braidlink_poly4" outlet="line2"/><dest obj="display" inlet="line2"/></net>
+      <net><source obj="braidlink_poly4" outlet="line3"/><dest obj="display" inlet="line3"/></net>
+      <net><source obj="braidlink_poly4" outlet="line4"/><dest obj="display" inlet="line4"/></net>
+   </nets>
+
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>0</NPresets>
+      <NPresetEntries>0</NPresetEntries>
+      <NModulationSources>0</NModulationSources>
+      <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
+      <Author>Lance Ship</Author>
+   </settings>
+   <notes><![CDATA[Braidlink Poly4 listens for up to four notes on the encoder-selected channel. Digitakt CC20-29 remain global/live controls for all sounding voices. MIDI offset mode is the default: CC64 is neutral around the Gills pot positions.]]></notes>
+   <windowPos><x>100</x><y>60</y><width>980</width><height>860</height></windowPos>
+</patch-1.0>

@@ -1,0 +1,81 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="spectralgarden" uuid="3E167A80-2972-4F58-9D77-BF7EC9A2D1C6">
+      <sDescription>Spectral Garden: a six-band interacting scale resonator with audio input, internal excitation, and bounded generative motion for Ksoloti Gills.</sDescription>
+      <author>Lance Ship</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32buffer.bipolar name="left" description="left audio input"/>
+         <frac32buffer.bipolar name="right" description="right audio input"/>
+         <frac32.positive name="band1" description="resonator band 1 energy and interaction"/>
+         <frac32.positive name="band2" description="resonator band 2 energy and interaction"/>
+         <frac32.positive name="band3" description="resonator band 3 energy and interaction"/>
+         <frac32.positive name="band4" description="resonator band 4 energy and interaction"/>
+         <frac32.positive name="band5" description="resonator band 5 energy and interaction"/>
+         <frac32.positive name="band6" description="resonator band 6 energy and interaction"/>
+         <frac32.positive name="rotate" description="manual rotation through twenty scale slots"/>
+         <frac32.positive name="spread" description="distance between neighboring resonator slots"/>
+         <frac32.positive name="resonance" description="bandpass Q and ringing time"/>
+         <frac32.positive name="motion" description="automatic movement, glide, and interaction depth"/>
+         <bool32 name="source" description="cycle pulse, air, and external input sources"/>
+         <bool32 name="mutate" description="advance the spectral pattern once"/>
+         <bool32 name="hold" description="hold or release automatic pitch movement"/>
+         <bool32 name="scale" description="cycle scale"/>
+         <int32.bipolar name="root" description="root MIDI note, expected range 24 to 60"/>
+         <bool32 name="strike" description="manually strike the active resonators"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio output"/>
+         <frac32buffer.bipolar name="right" description="right audio output"/>
+         <bool32 name="led1" description="strike activity"/>
+         <bool32 name="led2" description="air excitation selected"/>
+         <bool32 name="led3" description="automatic pitch movement held"/>
+         <bool32 name="led4" description="external input selected"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./spectralgarden_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[spectralgarden::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t controls[spectralgarden::Instrument::PARAM_LAST] = {
+  inlet_band1,
+  inlet_band2,
+  inlet_band3,
+  inlet_band4,
+  inlet_band5,
+  inlet_band6,
+  inlet_rotate,
+  inlet_spread,
+  inlet_resonance,
+  inlet_motion
+};
+
+instrument.Process(
+  controls,
+  inlet_source > 0,
+  inlet_mutate > 0,
+  inlet_hold > 0,
+  inlet_scale > 0,
+  inlet_root,
+  inlet_strike > 0,
+  &inlet_left[0],
+  &inlet_right[0],
+  &outlet_left[0],
+  &outlet_right[0]);
+
+outlet_led1 = instrument.strike_led() ? (1 << 27) : 0;
+outlet_led2 = instrument.air_mode() ? (1 << 27) : 0;
+outlet_led3 = instrument.hold() ? (1 << 27) : 0;
+outlet_led4 = instrument.input_mode() ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>

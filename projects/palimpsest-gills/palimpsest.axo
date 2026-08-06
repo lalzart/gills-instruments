@@ -1,0 +1,75 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="palimpsest" uuid="520EA41E-8014-476C-A835-699DF212E3B6">
+      <sDescription>Palimpsest: a four-stage generative instrument whose clean modal notes leave delayed, scale-aware harmonic traces.</sDescription>
+      <author>Lance Ship; Mutable Instruments sine resource by Emilie Gillet</author>
+      <license>MIT</license>
+      <inlets>
+         <frac32.positive name="stage1" description="form height for stage 1"/>
+         <frac32.positive name="stage2" description="form height for stage 2"/>
+         <frac32.positive name="stage3" description="form height for stage 3"/>
+         <frac32.positive name="stage4" description="form height for stage 4"/>
+         <frac32.positive name="rate" description="four-stage cycle rate"/>
+         <frac32.positive name="memory" description="high repeats, low evolves"/>
+         <frac32.positive name="material" description="harmonic to abstract modal material"/>
+         <frac32.positive name="spacing" description="time between harmonic traces"/>
+         <frac32.positive name="decay" description="trace decay time"/>
+         <frac32.positive name="wake" description="harmonic trace activity and mix"/>
+         <bool32.rising name="voice" description="cycle TRACE, KNOCK, SKIN, and SHARD voices"/>
+         <bool32.rising name="mutate" description="make one bounded mutation"/>
+         <bool32.rising name="lock" description="toggle automatic evolution lock"/>
+         <bool32 name="effect" description="tap to cycle CLEAN, FILT, and DRIVE; hold to clear traces"/>
+         <int32.bipolar name="encoder" description="root MIDI note, expected range 36 to 72"/>
+         <bool32.rising name="encoder_sw" description="cycle pitch scale"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="left" description="left audio"/>
+         <frac32buffer.bipolar name="right" description="right audio"/>
+         <bool32 name="led1" description="stage 1 active"/>
+         <bool32 name="led2" description="stage 2 active"/>
+         <bool32 name="led3" description="stage 3 active"/>
+         <bool32 name="led4" description="stage 4 active"/>
+         <charptr32 name="line1" description="Gills OLED line 1"/>
+         <charptr32 name="line2" description="Gills OLED line 2"/>
+         <charptr32 name="line3" description="Gills OLED line 3"/>
+         <charptr32 name="line4" description="Gills OLED line 4"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./palimpsest_dsp.h</include>
+      </includes>
+      <code.declaration><![CDATA[palimpsest::Instrument instrument;]]></code.declaration>
+      <code.init><![CDATA[instrument.Init();]]></code.init>
+      <code.krate><![CDATA[int32_t stages[4] = {
+  inlet_stage1, inlet_stage2, inlet_stage3, inlet_stage4
+};
+
+instrument.Process(
+  stages,
+  inlet_rate,
+  inlet_memory,
+  inlet_material,
+  inlet_spacing,
+  inlet_decay,
+  inlet_wake,
+  inlet_voice > 0,
+  inlet_mutate > 0,
+  inlet_lock > 0,
+  inlet_effect > 0,
+  inlet_encoder,
+  inlet_encoder__sw > 0,
+  &outlet_left[0],
+  &outlet_right[0]);
+
+const uint8_t stage = instrument.stage();
+outlet_led1 = stage == 0 ? (1 << 27) : 0;
+outlet_led2 = stage == 1 ? (1 << 27) : 0;
+outlet_led3 = stage == 2 ? (1 << 27) : 0;
+outlet_led4 = stage == 3 ? (1 << 27) : 0;
+outlet_line1 = instrument.line1();
+outlet_line2 = instrument.line2();
+outlet_line3 = instrument.line3();
+outlet_line4 = instrument.line4();]]></code.krate>
+   </obj.normal>
+</objdefs>
