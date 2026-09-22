@@ -1,6 +1,7 @@
 # Gills Instruments
 
-Private working collection of custom instruments for the Ksoloti Gills board.
+A working collection of custom embedded-DSP instruments for the Ksoloti Gills board. The projects combine Ksoloti patch graphs, local DSP headers, hardware-oriented validation, and per-instrument documentation/attribution.
+
 Each instrument keeps its patch, local object, DSP headers, documentation, and
 license together under `projects/`.
 
